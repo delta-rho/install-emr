@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# apt
+sudo apt-get -y update
+sudo apt-get -y install pkg-config
+
+# java
+echo '/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/' | sudo tee -a  /etc/ld.so.conf.d/jre.conf
+echo '/usr/lib/jvm/java-7-oracle/jre/lib/amd64/' | sudo tee -a  /etc/ld.so.conf.d/jre.conf
+echo '/home/hadoop/lib64' | sudo tee -a  /etc/ld.so.conf.d/hadoop.conf
+sudo ldconfig
+
+# hadoop config
+export HADOOP=/home/hadoop
+export HADOOP_HOME=/home/hadoop/
+export HADOOP_CONF_DIR=/home/hadoop/conf
+export HADOOP_LIBS=/home/hadoop:/home/hadoop/lib
+
+echo 'export HADOOP=/home/hadoop'| sudo tee -a /home/hadoop/.bash_profile
+echo 'export HADOOP_HOME=/home/hadoop/' | sudo tee -a /home/hadoop/.bash_profile
+echo 'export HADOOP_CONF_DIR=/home/hadoop/conf' | sudo tee -a /home/hadoop/.bash_profile
+echo 'export HADOOP_LIBS=/home/hadoop:/home/hadoop/lib'| sudo tee -a /home/hadoop/.bash_profile

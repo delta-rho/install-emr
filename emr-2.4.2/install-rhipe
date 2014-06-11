@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+wget http://people.mozilla.com/~sguha/Rhipe_0.74.0_hadoop-1.tar.gz 
+R CMD INSTALL Rhipe_0.74.0_hadoop-1.tar.gz 

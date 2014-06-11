@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## rstudio ##
+wget http://download2.rstudio.org/rstudio-server-0.98.507-amd64.deb
+sudo dpkg -i rstudio-server-0.98.507-amd64.deb
+sudo apt-get -f --force-yes --yes install

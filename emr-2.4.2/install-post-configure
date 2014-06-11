@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# setup R environment
+echo 'HADOOP=/home/hadoop'| sudo tee -a /etc/R/Renviron
+echo 'HADOOP_HOME=/home/hadoop/' | sudo tee -a /etc/R/Renviron
+echo 'HADOOP_CONF_DIR=/home/hadoop/conf' | sudo tee -a /etc/R/Renviron
+echo 'HADOOP_LIBS=/home/hadoop:/home/hadoop/lib'| sudo tee -a /etc/R/Renviron
+
+# add random user to login to r-studio
+sudo useradd -m user3
+echo "user3:user3" | sudo chpasswd
+
