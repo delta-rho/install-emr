@@ -1,4 +1,4 @@
-# RHIPE / datadr / Trelliscope on Amazon EMR #
+# Tessera Environment on Amazon EMR #
 ## Prereqs ##
 *****
 *   Comfortable installing software and using command line tools  
