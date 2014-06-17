@@ -1,17 +1,8 @@
 # https://github.com/tesseradata/example-vast-challenge/tree/gh-pages/bootcamp
 # convert to CLI?
- rhmkdir("/user/user3/vastChallenge")
 
- rhmkdir("/user/user3/vastChallenge/data")
- rhmkdir("/user/user3/vastChallenge/data/raw")
- rhmkdir("/user/user3/vastChallenge/data/raw/nf")
-
-hadoop distcp s3n://velocity/vast-data/nf-week2.csv /user/user3/vastChallenge/data/raw/nf
+#hadoop distcp s3n://velocity/vast-data/nf-week2.csv /user/user3/vastChallenge/data/raw/nf
 ## there is a stupid temp file from distcp that needs to be deleted
-
-## transform error:
-testing read on a subset... Error in as.POSIXlt.character(as.character(x), ...) : 
-  character string is not in a standard unambiguous format
   
   ## need to put this in a script
   #!/bin/bash
@@ -28,30 +19,21 @@ testing read on a subset... Error in as.POSIXlt.character(as.character(x), ...) 
   
   data:
 wget --no-check-certificate -O nf-week2-sample.csv https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2.csv
-#wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/vastChallenge.R
 
-
-sudo -u shiny nohup shiny-server &
-sudo -E -u hadoop /home/hadoop/bin/
-sudo -E -u hadoop /home/hadoop/bin/hadoop fs -chmod -R 777 /	
-sudo -E -u hadoop /home/hadoop/bin/hadoop fs -put nf-week2.csv /data/vast/raw/nf
-chmod 755 nf-week2-sample.csv
-R
-
-# cybertools not installed
-# need to use updated bootscript
 
 ### commands I ran ###
-   19  echo "hadoop:hadoop" | sudo chpasswd
-   20  sudo -u shiny nohup shiny-server &
-   21  hadoop fs -mkdir /tmp
-   22  hadoop fs -mkdir /user/hadoop/vast/raw/nf
-   23  hadoop fs -ls /user/hadoop
-   24  wget --no-check-certificate -O nf-week2-sample.csv https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2.csv
-   25  hadoop fs -put nf-week2-sample.csv /user/hadoop/vast/raw/nf
+echo "hadoop:hadoop" | sudo chpasswd
+sudo -u shiny nohup shiny-server &
+hadoop fs -mkdir /tmp
+hadoop fs -mkdir /user/hadoop/vast/raw/nf
+hadoop fs -ls /user/hadoop
+wget --no-check-certificate -O nf-week2-sample.csv https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2.csv
+hadoop fs -put nf-week2-sample.csv /user/hadoop/vast/raw/nf
    
+   
+   ## command to launch cluster
 ./elastic-mapreduce --create --alive --name "VelocityCluster" --enable-debugging \
---num-instances 2 --slave-instance-type m2.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
+--num-instances 5 --slave-instance-type m2.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
 --with-termination-protection \
 --key-pair Velocity \
 --log-uri s3n://velocity1/logs \
@@ -61,6 +43,8 @@ R
 --args "-m,mapred.map.child.java.opts=-Xmx1024m" \
 --args "-m,mapred.reduce.child.java.opts=-Xmx1024m" \
 --args "-m,mapred.job.reuse.jvm.num.tasks=1" \
+--args "-h,dfs.umaskmode=000" \
+--args "-h,dfs.permissions=true" \
 --bootstrap-action "s3://velocity1/install-preconfigure" \
 --bootstrap-action "s3://velocity1/install-r" \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://velocity1/install-rstudio" \
@@ -68,5 +52,11 @@ R
 --bootstrap-action "s3://velocity1/install-protobuf" \
 --bootstrap-action "s3://velocity1/install-rhipe" \
 --bootstrap-action "s3://velocity1/install-additional-pkgs" \
---bootstrap-action "s3://velocity1/install-post-configure"
+--bootstrap-action "s3://velocity1/install-post-configure" \
+--script s3://velocity1/install-post-hadoop
+
+###
+# run a script against all nodes:
+###
+./elastic-mapreduce -j <job id> --script s3://velocity1/<script name>
    

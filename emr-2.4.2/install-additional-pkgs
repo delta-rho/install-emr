@@ -6,5 +6,7 @@ sudo su - -c "R -e \"install.packages('devtools', repos='http://cran.rstudio.com
 ## datadr
 sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('datadr', 'tesseradata', ref = 'v0.7.2')\""
 ## trelliscope
-sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('trelliscope', 'hafen')\""
+sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('trelliscope', 'tesseradata')\""
+## cybertools
+sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('example-vast-challenge', 'tesseradata', subdir = 'package', ref = 'gh-pages')\""
 
