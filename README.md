@@ -22,6 +22,10 @@
 *   Copy the command below to your favorite text editor then replace `<bucket>` with your own S3 bucket (and path if different) and specify the key-pair you just made in the Amazon EMR install guide  
 *   Run the command from the command line (or DOS Prompt) on your local machine where you installed elastic-mapreduce as outlined in the install guide above  
 *   Linux/Mac  
+**NOTE**  
+The last line of this command  
+`--script s3://<bucket>/install-post-hadoop`  
+Is a "step" used to setup a multiuser environment and stage data. 
 ````
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
 --num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version "2.4.2" \
@@ -34,6 +38,8 @@
 --args "-m,mapred.map.child.java.opts=-Xmx1024m" \
 --args "-m,mapred.reduce.child.java.opts=-Xmx1024m" \
 --args "-m,mapred.job.reuse.jvm.num.tasks=1" \
+--args "-h,dfs.umaskmode=000" \
+--args "-h,dfs.permissions=true" \
 --bootstrap-action "s3://<bucket>/install-preconfigure" \
 --bootstrap-action "s3://<bucket>/install-r" \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-rstudio" \
@@ -41,7 +47,8 @@
 --bootstrap-action "s3://<bucket>/install-protobuf" \
 --bootstrap-action "s3://<bucket>/install-rhipe" \
 --bootstrap-action "s3://<bucket>/install-additional-pkgs" \
---bootstrap-action "s3://<bucket>/install-post-configure"  
+--bootstrap-action "s3://<bucket>/install-post-configure" \
+--script s3://<bucket>/install-post-hadoop	
 ````
   
 *   Windows Users:  
@@ -64,9 +71,6 @@ Once the cluster has been spun up (around 10 - 15 min) you can access the master
     
 *   All - Run the following on the master node after you have ssh'd in:  
 `sudo -u shiny nohup shiny-server &`  
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /user/user3`  	
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp`	
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -chmod -R 777 /`  
 
 ### Open Ports ###
 From the AWS EC2 web site, find the master node in the EC2 instance list and select the security group  
