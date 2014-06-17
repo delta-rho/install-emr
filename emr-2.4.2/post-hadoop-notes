@@ -33,7 +33,7 @@ hadoop fs -put nf-week2-sample.csv /user/hadoop/vast/raw/nf
    
    ## command to launch cluster
 ./elastic-mapreduce --create --alive --name "VelocityCluster" --enable-debugging \
---num-instances 5 --slave-instance-type m2.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
+--num-instances 20 --slave-instance-type m2.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
 --with-termination-protection \
 --key-pair Velocity \
 --log-uri s3n://velocity1/logs \

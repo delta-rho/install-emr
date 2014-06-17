@@ -4,7 +4,7 @@
 echo "hadoop:hadoop" | sudo chpasswd
 
 # start shiny
-sudo -u shiny nohup shiny-server &
+# sudo -u shiny nohup shiny-server &
 
 sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp
 
