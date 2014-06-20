@@ -38,6 +38,7 @@
 --bootstrap-action "s3://<bucket>/install-r" \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-rstudio" \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-shiny-server" \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-post-hadoop" \
 --bootstrap-action "s3://<bucket>/install-protobuf" \
 --bootstrap-action "s3://<bucket>/install-rhipe" \
 --bootstrap-action "s3://<bucket>/install-additional-pkgs" \
@@ -62,16 +63,6 @@ Once the cluster has been spun up (around 10 - 15 min) you can access the master
 *   Windows Users:
     *   `ruby elastic-mapreduce -ssh -j <job id from previous command>`
     
-*   All - Run the following on the master node after you have ssh'd in:  
-`sudo -u shiny nohup shiny-server &`  
-<<<<<<< HEAD
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /user/user3`  
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp`
-=======
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /user/user3`  	
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp`	
->>>>>>> 4d14fcadc11e92c6629585fc92fb43c05f3894e4
-`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -chmod -R 777 /`  
 
 ### Open Ports ###
 From the AWS EC2 web site, find the master node in the EC2 instance list and select the security group  
