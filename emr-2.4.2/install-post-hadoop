@@ -14,6 +14,7 @@ echo "	if [ \"/home/hadoop/bin/hadoop fs -test -d /mnt\" ]; then" >>/tmp/fireup.
 echo "		/home/hadoop/bin/hadoop fs -mkdir /user/user3" >>/tmp/fireup.sh
 echo "		/home/hadoop/bin/hadoop fs -mkdir /tmp" >>/tmp/fireup.sh
 echo "		/home/hadoop/bin/hadoop fs -chmod -R 777 /" >>/tmp/fireup.sh
+echo "		sudo -u shiny nohup shiny-server &" >>/tmp/fireup.sh
 # Anything you would like to add (configurations or installations) that require Hadoop, HDFS to be running
 # use a shell script format and enter after this comment, preferably before the empty crontab entry.
 # PLEASE TAKE CARE OF BASHISMS, AMAZON AMI BASH IS NOT STANDARD BASH
