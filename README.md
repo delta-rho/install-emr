@@ -64,8 +64,13 @@ Once the cluster has been spun up (around 10 - 15 min) you can access the master
     
 *   All - Run the following on the master node after you have ssh'd in:  
 `sudo -u shiny nohup shiny-server &`  
+<<<<<<< HEAD
 `sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /user/user3`  
 `sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp`
+=======
+`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /user/user3`  	
+`sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp`	
+>>>>>>> 4d14fcadc11e92c6629585fc92fb43c05f3894e4
 `sudo -E -u hadoop /home/hadoop/bin/hadoop fs -chmod -R 777 /`  
 
 ### Open Ports ###
