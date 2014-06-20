@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ################################################################################
 # Author: Ashrith Barthur
 # Date: 19/06/2014
@@ -7,7 +8,6 @@
 # v0.1 - pushing HDFS /tmp, /user/user3 and chmod configurations to this script
 # so that it does not have to be attempted manually after EMR initialization.
 ################################################################################
-#!/usr/bin/env bash
 
 echo "#!/usr/bin/env bash" >/tmp/fireup.sh
 echo "	if [ \"/home/hadoop/bin/hadoop fs -test -d /mnt\" ]; then" >>/tmp/fireup.sh
@@ -25,4 +25,4 @@ chmod +x /tmp/fireup.sh
 
 
 echo "*/1 * * * * export JAVA_HOME=/usr/lib/jvm/java-7-oracle; /tmp/fireup.sh" >/tmp/crontab.txt
-crontab crontab.txt
+crontab /tmp/crontab.txt
