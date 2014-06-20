@@ -99,5 +99,3 @@ login as user3/user3
 ## Known Issues ##
 *****
 *   "m1.large" or larger instance types must be used.  Smaller instance types have caused issues where hadoop is unable to start
-*   Shiny server does not start during the bootstrapping and attempts to make it do so have not been successful.  After the cluster has started you must ssh into the master and start it manually:  
-    `sudo -u shiny nohup shiny-server &`
