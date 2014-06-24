@@ -25,7 +25,7 @@
 **NOTE**  
 The last line of this command  
 `--script s3://<bucket>/install-post-hadoop`  
-Is a "step" used to setup a multiuser environment and stage data. 
+Is an optional "step" used to setup a multiuser environment and stage data. 
 ````
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
 --num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version "2.4.2" \
@@ -71,6 +71,7 @@ Once the cluster has been spun up (around 10 - 15 min) you can access the master
     
 *   All - Run the following on the master node after you have ssh'd in:  
 `sudo -u shiny nohup shiny-server &`  
+
 
 ### Open Ports ###
 From the AWS EC2 web site, find the master node in the EC2 instance list and select the security group  
