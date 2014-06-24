@@ -78,7 +78,7 @@ From the AWS EC2 web site, find the master node in the EC2 instance list and sel
 *   Select the "Inbound" tab
 *	Click "Edit"  
 *	Add "Custom TCP rule"  
-*	"port range" = 8787  
+*	"port range" = 80
 *	"source" = your IP address OR Anywhere  
 
 Repeat for ports (check that the port are not already available first): 22, 9100, 9103  
@@ -102,7 +102,8 @@ login as user3/user3
 *   This is based on Amazon AMI image 2.4.2.  More current AMIs come with R 3.x preinstalled and will be looked at in the future
 *   Amazon Hadoop 1.0.3 comes with Google proto bufs 2.4.1  
 *   This script uses Rhipe 0.74 which depends on proto bufs 2.4.1  
-*   Rhipe 0.75 is based on proto bufs 2.5.0 and initial testing was unsuccessful even with prot bufs 2.5 manually installed
+*   Rhipe 0.75 is based on proto bufs 2.5.0 and initial testing was unsuccessful even with prot bufs 2.5 manually installed  
+*	rstudio is now configured to run on port 80
 
 ## Known Issues ##
 *****

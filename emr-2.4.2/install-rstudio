@@ -4,3 +4,8 @@
 wget http://download2.rstudio.org/rstudio-server-0.98.507-amd64.deb
 sudo dpkg -i rstudio-server-0.98.507-amd64.deb
 sudo apt-get -f --force-yes --yes install
+
+# put rstudio on part 80
+echo "www-port=80" | sudo tee -a /etc/rstudio/rserver.conf
+
+sudo rstudio-server restart
