@@ -32,17 +32,18 @@ hadoop fs -put nf-week2-sample.csv /user/hadoop/vast/raw/nf
    
    
    ## command to launch cluster
-./elastic-mapreduce --create --alive --name "VelocityCluster" --enable-debugging \
---num-instances 20 --slave-instance-type m2.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
+./elastic-mapreduce --create --alive --name "VelocityCluster-c3.8xLarge" --enable-debugging \
+--num-instances 20 --slave-instance-type c3.8xlarge --master-instance-type c3.8xlarge --ami-version "2.4.2" \
 --with-termination-protection \
---key-pair Velocity \
+--key-pair Velocity-Oregon \
 --log-uri s3n://velocity1/logs \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \
 --args "-m,mapred.reduce.tasks.speculative.execution=false" \
 --args "-m,mapred.map.tasks.speculative.execution=false" \
---args "-m,mapred.map.child.java.opts=-Xmx1024m" \
---args "-m,mapred.reduce.child.java.opts=-Xmx1024m" \
+--args "-m,mapred.child.java.opts=-Xmx2048m" \
 --args "-m,mapred.job.reuse.jvm.num.tasks=1" \
+--args "-m,mapred.tasktracker.map.tasks.maximum=24" \
+--args "-m,mapred.tasktracker.reduce.tasks.maximum=4" \
 --args "-h,dfs.umaskmode=000" \
 --args "-h,dfs.permissions=true" \
 --bootstrap-action "s3://velocity1/install-preconfigure" \
@@ -53,10 +54,19 @@ hadoop fs -put nf-week2-sample.csv /user/hadoop/vast/raw/nf
 --bootstrap-action "s3://velocity1/install-rhipe" \
 --bootstrap-action "s3://velocity1/install-additional-pkgs" \
 --bootstrap-action "s3://velocity1/install-post-configure" \
---script s3://velocity1/install-post-hadoop
+--script s3://velocity1/install-post-hadoop --args "1"
 
 ###
 # run a script against all nodes:
 ###
 ./elastic-mapreduce -j <job id> --script s3://velocity1/<script name>
-   
+
+Notes from walk through
+=============================
+Need bigger nodes - updateAttributes takes a long time
+Check on the log files as an issue?
+multiple clusters?
+fair scheduler?
+Add more tasks to nodes?
+"pull request"
+Hadoop gplcompression error
