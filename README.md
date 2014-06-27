@@ -28,16 +28,13 @@ The last line of this command
 Is an optional "step" used to setup a multiuser environment and stage data. 
 ````
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
---num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version "2.4.2" \
+--num-instances 2 --slave-instance-type r3.xlarge --master-instance-type r3.xlarge --ami-version "2.4.2" \
 --with-termination-protection \
 --key-pair <Your Key Pair> \
 --log-uri s3://<bucket>/logs \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \
 --args "-m,mapred.reduce.tasks.speculative.execution=false" \
 --args "-m,mapred.map.tasks.speculative.execution=false" \
---args "-m,mapred.map.child.java.opts=-Xmx1024m" \
---args "-m,mapred.reduce.child.java.opts=-Xmx1024m" \
---args "-m,mapred.job.reuse.jvm.num.tasks=1" \
 --args "-h,dfs.umaskmode=000" \
 --args "-h,dfs.permissions=true" \
 --bootstrap-action "s3://<bucket>/install-preconfigure" \
@@ -48,7 +45,7 @@ Is an optional "step" used to setup a multiuser environment and stage data.
 --bootstrap-action "s3://<bucket>/install-rhipe" \
 --bootstrap-action "s3://<bucket>/install-additional-pkgs" \
 --bootstrap-action "s3://<bucket>/install-post-configure" \
---script s3://<bucket>/install-post-hadoop	
+--script s3://<bucket>/install-post-hadoop --args "<user count>"  
 ````
   
 *   Windows Users:  
@@ -87,7 +84,7 @@ Repeat for ports (check that the port are not already available first): 22, 9100
 ## Accessing RStudio ##
 *****
 
-From your local machine, using the IP address or public DNS of the master node  (listed in the cluster details on the AWS EMR console page above) from a  web browser navigate to http://[master ip address]:8787  
+From your local machine, using the IP address or public DNS of the master node  (listed in the cluster details on the AWS EMR console page above) from a  web browser navigate to http://[master ip address]  
 login as user3/user3  
 
 ## Common Problems ##
