@@ -1,0 +1,10 @@
+#!/bin/bash
+## Runs on All nodes
+## install-all-software
+wget http://ml.stat.purdue.edu/rpackages/emr-binaries/forAll-binaries.tar.gz ~/
+tar zxvf forAll-binaries.tar.gz
+mv forAll emr-binaries
+cd emr-binaries
+sh complete.protobuf
+mv site-library/* /usr/local/lib/R/site-library/
+ln -s /usr/local/lib/R/site-library/rterra/include /usr/local/lib/R/site-library/rterra/clangheaders
