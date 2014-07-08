@@ -73,7 +73,11 @@ From the AWS EC2 web site, find the master node in the EC2 instance list and sel
 *	"port range" = 8787  
 *	"source" = your IP address OR Anywhere  
 
-Repeat for ports (check that the port are not already available first): 22, 9100, 9103  
+Repeat for ports (check that the port are not already available first): 22,	9100, 9103,3838 (for shiny server)
+This need only be done once for the security group of the master. All subsequent
+clusters will have their master inside the same security group and the security
+permissions will be applicable to them too.
+
 
 ## Accessing RStudio ##
 *****
