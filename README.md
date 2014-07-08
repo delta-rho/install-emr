@@ -23,27 +23,27 @@
 *   Run the command from the command line (or DOS Prompt) on your local machine where you installed elastic-mapreduce as outlined in the install guide above  
 *   Linux/Mac  
 ````
+export S3BUCKET=sguhamozilaemr
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
---num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version "2.4.2" \
+--num-instances 3 --slave-instance-type m3.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
 --with-termination-protection \
---key-pair <Your Key Pair> \
---log-uri s3://<bucket>/logs \
+--key-pair sguhaec2 \
+--log-uri s3://$S3BUCKET/logs/ \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \
 --args "-m,mapred.reduce.tasks.speculative.execution=false" \
 --args "-m,mapred.map.tasks.speculative.execution=false" \
 --args "-m,mapred.map.child.java.opts=-Xmx1024m" \
 --args "-m,mapred.reduce.child.java.opts=-Xmx1024m" \
 --args "-m,mapred.job.reuse.jvm.num.tasks=1" \
---bootstrap-action "s3://<bucket>/install-preconfigure" \
---bootstrap-action "s3://<bucket>/install-r" \
---bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-rstudio" \
---bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-shiny-server" \
---bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-post-hadoop" \
---bootstrap-action "s3://<bucket>/install-protobuf" \
---bootstrap-action "s3://<bucket>/install-rhipe" \
---bootstrap-action "s3://<bucket>/install-additional-pkgs" \
---bootstrap-action "s3://<bucket>/install-post-configure"  
+--bootstrap-action "s3://$S3BUCKET/install-preconfigure" \
+--bootstrap-action "s3://$S3BUCKET/install-r" \
+--bootstrap-action "s3://$S3BUCKET/install-all-software" \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://$S3BUCKET/install-master-r" \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://$S3BUCKET/install-post-hadoop" \
+--bootstrap-action "s3://$S3BUCKET/install-additional-pkgs" \
+--bootstrap-action "s3://$S3BUCKET/install-post-configure"  
 ````
+
   
 *   Windows Users:  
     *   Run the following command from the DOS Prompt  
