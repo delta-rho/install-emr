@@ -27,7 +27,7 @@ export S3BUCKET=sguhamozilaemr
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
 --num-instances 3 --slave-instance-type m3.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
 --with-termination-protection \
---key-pair sguhaec2 \
+--key-pair KEYPAIRAME \
 --log-uri s3://$S3BUCKET/logs/ \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \
 --args "-m,mapred.reduce.tasks.speculative.execution=false" \
