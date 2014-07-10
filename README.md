@@ -41,6 +41,7 @@ export S3BUCKET=sguhamozillaemr
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://$S3BUCKET/install-master-r" \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://$S3BUCKET/install-post-hadoop" \
 --bootstrap-action "s3://$S3BUCKET/install-additional-pkgs" \
+--bootstrap-action "s3://$S3BUCKET/install-rhipe" \
 --bootstrap-action "s3://$S3BUCKET/install-post-configure"  
 ````
 

@@ -5,6 +5,6 @@
 ## already have this version of RHIPE. However invoke this if you want a newer
 ## version of RHIPE. This adds ~ 35 seconds to the build time
 ##################################################################################
-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-wget http://people.mozilla.com/~sguha/Rhipe_0.74.0_hadoop-1.tar.gz 
-R CMD INSTALL Rhipe_0.74.0_hadoop-1.tar.gz 
+# export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+# wget http://people.mozilla.com/~sguha/Rhipe_0.74.0_hadoop-1.tar.gz 
+# R CMD INSTALL Rhipe_0.74.0_hadoop-1.tar.gz 
