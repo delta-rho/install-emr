@@ -6,5 +6,6 @@ wget https://protobuf.googlecode.com/files/protobuf-$PROTO_BUF_VERSION.tar.bz2
 tar jxvf protobuf-$PROTO_BUF_VERSION.tar.bz2
 cd protobuf-$PROTO_BUF_VERSION
 ./configure && make -j4
-sudo make install
-cd ..
+
+#sudo make install
+#cd ..

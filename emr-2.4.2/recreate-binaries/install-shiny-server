@@ -35,6 +35,11 @@ mkdir ../build
 # Need to rebuild our gyp bindings since 'npm rebuild' won't run gyp for us.
 (cd .. && ext/node/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js --python="$PYTHON" rebuild)
 
+
+### STOP HERE DURING BINARY RECREATION PROCESS
+## Up to this point is required to recreate the binaries, then copy the following code
+## to an install script
+
 # Install the software at the predefined location
 sudo make install
 

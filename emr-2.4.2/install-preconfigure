@@ -1,13 +1,20 @@
 #!/bin/bash
 
-# apt
 sudo apt-get -y update
 sudo apt-get -y install pkg-config
+sudo apt-get -y install libcurl4-openssl-dev  libtbb-dev
+
+
 
 # java
-echo '/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/' | sudo tee -a  /etc/ld.so.conf.d/jre.conf
-echo '/usr/lib/jvm/java-7-oracle/jre/lib/amd64/' | sudo tee -a  /etc/ld.so.conf.d/jre.conf
-echo '/home/hadoop/lib64' | sudo tee -a  /etc/ld.so.conf.d/hadoop.conf
+echo '/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/' | sudo tee -a /etc/ld.so.conf.d/jre.conf
+echo '/usr/lib/jvm/java-7-oracle/jre/lib/amd64/' | sudo tee -a /etc/ld.so.conf.d/jre.conf
+echo '/home/hadoop/lib64' | sudo tee -a /etc/ld.so.conf.d/hadoop.conf
+
+## Link JavaH and JAR to /usr/bin/
+## compiling rJava seems to fail without this
+sudo ln  -s /usr/lib/jvm/java-7-oracle/bin/javah /usr/bin/javah
+sudo ln  -s /usr/lib/jvm/java-7-oracle/bin/jar /usr/bin/jar
 sudo ldconfig
 
 # hadoop config
@@ -20,3 +27,8 @@ echo 'export HADOOP=/home/hadoop'| sudo tee -a /home/hadoop/.bash_profile
 echo 'export HADOOP_HOME=/home/hadoop/' | sudo tee -a /home/hadoop/.bash_profile
 echo 'export HADOOP_CONF_DIR=/home/hadoop/conf' | sudo tee -a /home/hadoop/.bash_profile
 echo 'export HADOOP_LIBS=/home/hadoop:/home/hadoop/lib'| sudo tee -a /home/hadoop/.bash_profile
+
+## Remove this troublesome file
+rm -rf /home/hadoop/.versions/hive-0.11.0/hcatalog/share/webhcat/svr/lib/xercesImpl-2.6.1.jar 
+
+

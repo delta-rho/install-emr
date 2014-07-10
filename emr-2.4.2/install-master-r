@@ -1,0 +1,11 @@
+#!/bin/bash
+## Runs on master
+## install-server-r-components
+wget http://ml.stat.purdue.edu/rpackages/emr-binaries/forMaster-binaries.tar.gz 
+tar zxvf forMaster-binaries.tar.gz
+rm -rf emr-binaries
+mv forMaster /home/hadoop/emr-binaries
+cd /home/hadoop/emr-binaries
+sh complete.rstudio.shiny
+
+
