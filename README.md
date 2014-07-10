@@ -23,7 +23,7 @@
 *   Run the command from the command line (or DOS Prompt) on your local machine where you installed elastic-mapreduce as outlined in the install guide above  
 *   Linux/Mac  
 ````
-export S3BUCKET=sguhamozilaemr
+export S3BUCKET=sguhamozillaemr
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
 --num-instances 3 --slave-instance-type m3.xlarge --master-instance-type m3.xlarge --ami-version "2.4.2" \
 --with-termination-protection \
