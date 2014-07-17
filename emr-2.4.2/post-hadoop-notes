@@ -70,3 +70,26 @@ fair scheduler?
 Add more tasks to nodes?
 "pull request"
 Hadoop gplcompression error
+
+##
+# Prototype for Bootcamp with rstudio pro and R 3.1.1
+##
+./elastic-mapreduce --create --alive --name "Bootcamp-Prototype-7/17-rstudio-pro-r3.1.1" --enable-debugging \
+--num-instances 4 --slave-instance-type r3.2xlarge --master-instance-type r3.2xlarge --ami-version "2.4.2" \
+--key-pair Velocity \
+--log-uri s3n://velocity1/logs \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \
+--args "-m,mapred.reduce.tasks.speculative.execution=false" \
+--args "-m,mapred.map.tasks.speculative.execution=false" \
+--args "-h,dfs.umaskmode=000" \
+--args "-h,dfs.permissions=true" \
+--bootstrap-action "s3://velocity1/install-preconfigure" \
+--bootstrap-action "s3://velocity1/install-r" \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://velocity1/install-rstudio-pro" \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://velocity1/install-shiny-server" \
+--bootstrap-action "s3://velocity1/install-protobuf" \
+--bootstrap-action "s3://velocity1/install-rhipe" \
+--bootstrap-action "s3://velocity1/install-additional-pkgs" \
+--bootstrap-action "s3://velocity1/install-post-configure" \
+--script s3://velocity1/install-post-hadoop --args "4"
+ 

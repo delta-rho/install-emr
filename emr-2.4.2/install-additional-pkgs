@@ -9,4 +9,6 @@ sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtoo
 sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('trelliscope', 'tesseradata')\""
 ## cybertools
 sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('example-vast-challenge', 'tesseradata', subdir = 'package', ref = 'gh-pages')\""
+## stl2
+sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('stl2', 'hafen')\""
 

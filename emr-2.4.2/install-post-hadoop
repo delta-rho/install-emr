@@ -20,14 +20,16 @@ sudo -E -u hadoop /home/hadoop/bin/hadoop fs -mkdir /tmp
 
 #download data & scripts
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.2.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.2_solutions.R
+#wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.2_solutions.R
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.3.R
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.3_solutions.R
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.4.R
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.4_solutions.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/activity2.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/activity3.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/activity4.R
+wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.5.R
+wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.5_solutions.R
+wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.1.R
+wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.2.R
+wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.3.R
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/dailycount.Rdata
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2-sample.csv
 wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2.csv
