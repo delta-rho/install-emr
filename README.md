@@ -16,9 +16,16 @@
 
 ## Instantiating a Cluster ##
 *****
+*   Make sure all the pre-reqs are completed and you can successfully run the elastic-mapreduce command by running
+    *   `./elastic-mapreduce --list` 
+    *   this may not return anything but it should also not produce any errors
 *   Do a `git clone` of this repo or download the files as a zip (click the "Download ZIP" button on the right) from this github site and unzip them
 *   Upload all `emr-2.4.2/install-*` scripts to your S3 Bucket (ignore the Rhipe-*tar.gz)  
     *   This can be done through the AWS S3 web site
+*   Copy the "launch-cluster.sh" script (Linux/Mac) to your elastic-search-cli directory then from the command line run
+    *   `chmod +x launch-cluster.sh`
+    *   `./launch-cluster.sh cluster-name key-pair-name s3-bucket`
+*   **OR**
 *   Copy the command below to your favorite text editor then replace `<bucket>` with your own S3 bucket (and path if different) and specify the key-pair you just made in the Amazon EMR install guide  
 *   Run the command from the command line (or DOS Prompt) on your local machine where you installed elastic-mapreduce as outlined in the install guide above  
 *   Linux/Mac  
@@ -61,7 +68,7 @@ Once the cluster has been spun up (around 10 - 15 min) you can access the master
 `./elastic-mapreduce --ssh -j <job id from previous command>`  
 (if you are familiar with EC2 you can access the master node via the ip address and pem as well)     
 *   Windows Users:
-    *   `ruby elastic-mapreduce -ssh -j <job id from previous command>`
+    *   A little more involved.  Follow Amazon's instructions to import the PEM into Putty using putty-gen then "putty" (ssh) to the server
     
 
 ### Open Ports ###
@@ -99,3 +106,4 @@ login as user3/user3
 ## Known Issues ##
 *****
 *   "m1.large" or larger instance types must be used.  Smaller instance types have caused issues where hadoop is unable to start
+
