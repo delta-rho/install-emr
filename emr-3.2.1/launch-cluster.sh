@@ -22,3 +22,5 @@ fi
 --script s3://$3/post-install-config.sh --args "1"
 
 #--num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version 3.2.1 \
+
+William Pottinger <wpottinger@clearedgeit.com>

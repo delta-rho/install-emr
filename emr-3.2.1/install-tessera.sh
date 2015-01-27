@@ -45,12 +45,14 @@ sudo make install
 cd ..
 
 #rhipe
-wget https://s3-us-west-2.amazonaws.com/velocity1/Rhipe_0.75.0_cdh5.tar.gz
+export RHIPE_VERSION=0.75.1_hadoop-2
+# wget https://s3-us-west-2.amazonaws.com/velocity1/Rhipe_0.75.0_cdh5.tar.gz
+wget https://s3.amazonaws.com/tessera/Rhipe_$RHIPE_VERSION.tar.gz
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 sudo chmod 777 /usr/lib64/R/library
 sudo chmod -R 777 /usr/share/
-R CMD INSTALL Rhipe_0.75.0_cdh5.tar.gz
+R CMD INSTALL Rhipe_$RHIPE_VERSION.tar.gz
 
 sudo yum -y install libcurl-devel
 
