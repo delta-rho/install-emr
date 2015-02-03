@@ -33,7 +33,14 @@ sudo su - -c "R -e \"install.packages('codetools', repos='http://cran.rstudio.co
 sudo su - -c "R -e \"install.packages('lattice', repos='http://cran.rstudio.com/')\""
 sudo su - -c "R -e \"install.packages('MASS', repos='http://cran.rstudio.com/')\""
 sudo su - -c "R -e \"install.packages('boot', repos='http://cran.rstudio.com/')\""
-sudo -E R -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
+sudo su - -c "R -e \"install.packages('shiny', repos='http://cran.rstudio.com/')\""
+sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('hafen/housingData')\""
+sudo su - -c "R -e \"install.packages('maps',repos='http://cran.rstudio.com/')\""
+sudo su - -c "R -e \"install.packages('mixtools', repos='http://cran.rstudio.com/')\""
+sudo su - -c "R -e \"install.packages('lubridate', repos='http://cran.rstudio.com/')\""
+
+wget https://s3.amazonaws.com/tessera/cyberTools_0.1.tar.gz
+sudo R CMD INSTALL cyberTools_0.1.tar.gz
 
 #protobuf 2.5.0 comes with hadoop but need the .so files
 export PROTO_BUF_VERSION=2.5.0
@@ -46,8 +53,11 @@ cd ..
 
 #rhipe
 export RHIPE_VERSION=0.75.1_hadoop-2
-# wget https://s3-us-west-2.amazonaws.com/velocity1/Rhipe_0.75.0_cdh5.tar.gz
+
 wget https://s3.amazonaws.com/tessera/Rhipe_$RHIPE_VERSION.tar.gz
+
+# wget http://ml.stat.purdue.edu/rhipebin/Rhipe_$RHIPE_VERSION.tar.gz
+
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 sudo chmod 777 /usr/lib64/R/library
@@ -59,10 +69,6 @@ sudo yum -y install libcurl-devel
 sudo -E R -e "install.packages('devtools', repos='http://cran.rstudio.com/')"
 sudo -E R -e "options(unzip = 'unzip', repos = 'http://cran.rstudio.com/'); library(devtools); install_github('datadr', 'tesseradata')"
 sudo -E R -e "options(unzip = 'unzip', repos = 'http://cran.rstudio.com/'); library(devtools); install_github('trelliscope', 'tesseradata')"
-## cybertools
-# sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('example-vast-challenge', 'tesseradata', subdir = 'package', ref = 'gh-pages')\""
-## stl2
-# sudo su - -c "R -e \"options(repos = 'http://cran.rstudio.com/'); library(devtools); install_github('stl2', 'hafen')\""
 
 # setup R environment
 sudo mkdir /etc/R/

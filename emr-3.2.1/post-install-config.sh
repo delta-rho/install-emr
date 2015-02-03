@@ -10,26 +10,27 @@ fi
 
 echo "USER_COUNT=$USER_COUNT"
 # give hadoop a password
-echo "hadoop:hadoop" | sudo chpasswd
+# echo "hadoop:hadoop" | sudo chpasswd
 
 hadoop fs -mkdir /tmp
 
 #download data & scripts
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.2.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.2.R
 #wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.2_solutions.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.3.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.3_solutions.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.4.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.4_solutions.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.5.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.5_solutions.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.1.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.2.R
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.3.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.3.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.3_solutions.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.4.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.4_solutions.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.5.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_1.5_solutions.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.1.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.2.R
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/Activity_2.3.R
 # wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/dailycount.Rdata
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2-sample.csv
-# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2.csv
-wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/some_fake_data.csv
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2-sample.csv
+wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/nf-week2.csv
+# wget --no-check-certificate https://s3-us-west-2.amazonaws.com/velocity1/vast-data/some_fake_data.csv
+
 
 #create users
 USER_COUNT=$1
@@ -41,9 +42,9 @@ for i in $(eval echo "{1..$USER_COUNT}")
 	  # give them a password
 	  echo "bootcamp-user-$i:bootcamp" | sudo chpasswd
 	  # create data dir in hadoop
-  	  hadoop fs -mkdir /user/bootcamp-user-$i/vast/raw/nf
+  	  hadoop fs -mkdir -p /user/bootcamp-user-$i/vast/raw/nf
 	  # put the data in hdfs
-	  hadoop fs -put nf-week2-sample.csv /user/bootcamp-user-$i/vast/raw/nf/nf-week2.csv
+	  hadoop fs -put nf-week2.csv /user/bootcamp-user-$i/vast/raw/nf/nf-week2.csv
 	    
       # change perms
 	  hadoop fs -chown -R bootcamp-user-$i /user/bootcamp-user-$i
@@ -51,6 +52,8 @@ for i in $(eval echo "{1..$USER_COUNT}")
 	  sudo cp nf-week2-sample.csv Activity* some_* /home/bootcamp-user-$i
 	  # create R lib directory
 	  sudo mkdir -p /home/bootcamp-user-$i/R/lib
+      # create tmp
+      sudo mkdir /home/bootcamp-user-$i/tmp
 	  # give everyone persmissions
 	  sudo chown -R bootcamp-user-$i /home/bootcamp-user-$i
 	  # set some R environment variables
