@@ -1,4 +1,4 @@
-# Tessera Environment on Amazon EMR #
+# Tessera Environment on Amazon EMR AMI 3.2.1 #
 ## Prereqs ##
 *****
 *   Comfortable installing software and using command line tools  
@@ -16,42 +16,35 @@
 
 ## Instantiating a Cluster ##
 *****
-*   Make sure all the pre-reqs are completed and you can successfully run the elastic-mapreduce command by running
-    *   `./elastic-mapreduce --list` 
-    *   this may not return anything but it should also not produce any errors
 *   Do a `git clone` of this repo or download the files as a zip (click the "Download ZIP" button on the right) from this github site and unzip them
-*   Upload all `emr-2.4.2/install-*` scripts to your S3 Bucket (ignore the Rhipe-*tar.gz)  
+*   Upload all `emr-3.2.1/install-*` scripts, Rhipe_*.tag.gz  to your S3 Bucket and optionally `post-install-config.sh` (more info below) 
     *   This can be done through the AWS S3 web site
-*   Copy the "launch-cluster.sh" script (Linux/Mac) to your elastic-search-cli directory then from the command line run
-    *   `chmod +x launch-cluster.sh`
-    *   `./launch-cluster.sh cluster-name key-pair-name s3-bucket`
-*   **OR**
-*   Copy the command below to your favorite text editor then replace `<bucket>` with your own S3 bucket (and path if different) and specify the key-pair you just made in the Amazon EMR install guide  
+*   Copy the command below (or run the script launch-cluster.sh - see below) to your favorite text editor then replace `<bucket>` with your own S3 bucket (and path if different) and specify the key-pair you just made in the Amazon EMR install guide  
 *   Run the command from the command line (or DOS Prompt) on your local machine where you installed elastic-mapreduce as outlined in the install guide above  
 *   Linux/Mac  
+**NOTE**  
+The last line of this command  
+`--script s3://<bucket>/post-install-config.sh`  
+Is an optional step used to setup a multiuser environment and stage data. 
 ````
 ./elastic-mapreduce --create --alive --name "RhipeCluster" --enable-debugging \
---num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version "2.4.2" \
+--num-instances 2 --slave-instance-type m1.large --master-instance-type m3.xlarge --ami-version 3.2.1 \
 --with-termination-protection \
 --key-pair <Your Key Pair> \
 --log-uri s3://<bucket>/logs \
 --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \
 --args "-m,mapred.reduce.tasks.speculative.execution=false" \
 --args "-m,mapred.map.tasks.speculative.execution=false" \
---args "-m,mapred.map.child.java.opts=-Xmx1024m" \
---args "-m,mapred.reduce.child.java.opts=-Xmx1024m" \
---args "-m,mapred.job.reuse.jvm.num.tasks=1" \
---bootstrap-action "s3://<bucket>/install-preconfigure" \
---bootstrap-action "s3://<bucket>/install-r" \
---bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-rstudio" \
---bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-shiny-server" \
---bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-post-hadoop" \
---bootstrap-action "s3://<bucket>/install-protobuf" \
---bootstrap-action "s3://<bucket>/install-rhipe" \
---bootstrap-action "s3://<bucket>/install-additional-pkgs" \
---bootstrap-action "s3://<bucket>/install-post-configure"  
+--args "-h,dfs.umaskmode=000" \
+--args "-h,dfs.permissions=true" \
+--bootstrap-action "s3://<bucket>/install-tessera" \
+--bootstrap-action s3://elasticmapreduce/bootstrap-actions/run-if --args "instance.isMaster=true,s3://<bucket>/install-tessera-master" \
+--script s3://<bucket>/post-install-config.sh --args "<user count>"  
 ````
   
+*   Alternatively you can run the "launch-cluster.sh" script  
+`launch-cluster name keypair-name s3-bucket`  
+
 *   Windows Users:  
     *   Run the following command from the DOS Prompt  
     `ruby elastic-mapreduce <all the above arguments on a single line>`  
@@ -61,15 +54,13 @@ https://console.aws.amazon.com/elasticmapreduce/vnext/home
   
 ## Post Instantiation Configuration ##
 *****
-Currently there a few steps that have not been automated that need to be done manually when the cluster has finished provisioning  
-Once the cluster has been spun up (around 10 - 15 min) you can access the master node via ssh through the elastic-mapreduce CLI  
-
+*   Accessing your server  
 *   Linux/Mac  
 `./elastic-mapreduce --ssh -j <job id from previous command>`  
 (if you are familiar with EC2 you can access the master node via the ip address and pem as well)     
 *   Windows Users:
-    *   A little more involved.  Follow Amazon's instructions to import the PEM into Putty using putty-gen then "putty" (ssh) to the server
-    
+    *   `ruby elastic-mapreduce -ssh -j <job id from previous command>`
+
 
 ### Open Ports ###
 From the AWS EC2 web site, find the master node in the EC2 instance list and select the security group  
@@ -77,7 +68,7 @@ From the AWS EC2 web site, find the master node in the EC2 instance list and sel
 *   Select the "Inbound" tab
 *	Click "Edit"  
 *	Add "Custom TCP rule"  
-*	"port range" = 8787  
+*	"port range" = 80
 *	"source" = your IP address OR Anywhere  
 
 Repeat for ports (check that the port are not already available first): 22, 9100, 9103  
@@ -85,8 +76,9 @@ Repeat for ports (check that the port are not already available first): 22, 9100
 ## Accessing RStudio ##
 *****
 
-From your local machine, using the IP address or public DNS of the master node  (listed in the cluster details on the AWS EMR console page above) from a  web browser navigate to http://[master ip address]:8787  
-login as user3/user3  
+From your local machine, using the IP address or public DNS of the master node  (listed in the cluster details on the AWS EMR console page above) from a  web browser navigate to http://[master ip address]  
+login as the user you have created and setup  
+Or if you ran the post-install-config.sh script login as bootcamp-user-1/bootcamp
 
 ## Common Problems ##
 *****
@@ -98,12 +90,10 @@ login as user3/user3
  
 ## Notes ##
 *****
-*   This is based on Amazon AMI image 2.4.2.  More current AMIs come with R 3.x preinstalled and will be looked at in the future
-*   Amazon Hadoop 1.0.3 comes with Google proto bufs 2.4.1  
-*   This script uses Rhipe 0.74 which depends on proto bufs 2.4.1  
-*   Rhipe 0.75 is based on proto bufs 2.5.0 and initial testing was unsuccessful even with prot bufs 2.5 manually installed
+*   This is based on Amazon AMI image 3.2.1  
+*   This script uses Rhipe 0.75 which depends on proto bufs 2.5.0  
 
 ## Known Issues ##
 *****
-*   "m1.large" or larger instance types must be used.  Smaller instance types have caused issues where hadoop is unable to start
-
+*   "m1.large" or larger instance types must be used.  Smaller instance types have caused issues where hadoop is unable to start  
+*   A user must be properly configured to access rstudio and run RHIPE.  The post-install-config.sh does this.  Customize as needed.
