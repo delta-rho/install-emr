@@ -11,8 +11,7 @@ gpg -a --export 06F90DE5381BA480 | sudo apt-key add -
 
 # install 3.1
 sudo apt-get --yes update
-sudo -E apt-get -t squeezecran3.0 --yes --force-yes install r-base-core=3.1.0-1~squeezecran3.0
-sudo -E apt-get -t squeezecran3.0 --yes --force-yes install r-base-dev=3.1.0-1~squeezecran3.0
+sudo -E apt-get -t squeeze-cran3 --yes --force-yes install r-base-core=3.1.1-1~squeezecran3.0
 sudo chmod -R aou=rwx  /usr/local/lib/R/site-library
 
 # packages need updating
