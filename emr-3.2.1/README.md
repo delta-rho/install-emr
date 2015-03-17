@@ -1,7 +1,7 @@
 Tessera Environment on Amazon EMR
 =================================
 
-**Note:** these scripts are experimental.  We would appreciate users testing them out and using them and providing feedback / fixes.
+**Note:** These scripts are experimental.  We would appreciate users testing them out and using them and providing feedback / fixes.
 
 ### Prerequisites ###
 
@@ -79,7 +79,7 @@ You can sign in if you have an existing amazon.com account or create a new accou
 
 #### Set up an s3 bucket ####
 
-We will use this to store the EMR startup scripts and you can also use it to store your HDFS data
+We will use this to store the EMR startup scripts and you can also use it to store your HDFS data.
 
 - Sign in to the [AWS management console](http://console.aws.amazon.com/)
 - Click "S3"
@@ -95,7 +95,7 @@ Instructions for how to install the AWS CLI can be found [here](http://docs.aws.
 
 #### Configure AWS CLI ####
 
-Follow the instrutions [here](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) to configure the AWS CLI
+Follow the instrutions [here](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) to configure the AWS CLI.
 
 Some notes:
 
