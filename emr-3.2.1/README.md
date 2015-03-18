@@ -82,6 +82,7 @@ You can sign in if you have an existing amazon.com account or create a new accou
 - Click on "Key Pairs" under "Network & Security"
 - Click the "Create Key Pair" button
 - Name it what you'd like, e.g. "tessera-emr"
+- Keep track of the name of this file, as it will be the `-k` argument to `tessera-emr.sh`.
 - A file with that name and a .pem extension will be downloaded
 - You can put this file where you'd like but treat it with care (don't share with anyone or put it anywhere where others can get it)
 - You can put it in the emr-3.2.1 directory of this repo if you'd like (but don't check it in to git)

@@ -9,6 +9,9 @@ This script launches an EMR Tessera cluster
 OPTIONS:
    -h      Show this message
    -n      Number of worker nodes (default 2)
+   -k      EC2 key-pair name
+           (see key pairs in http://console.aws.amazon.com/ec2)
+           If not specified, will use first listed key pair name
    -s      S3 bucket location to store scripts (required)
    -m      Master instance type (default m1.large)
    -w      Worker instance(s) type (default m1.large)
@@ -30,6 +33,7 @@ WORKER_TYPE=m1.large
 USER=tessera-user
 PASSWD=tessera
 CIDR=$(dig +short myip.opendns.com @resolver1.opendns.com)/32
+KEY_PAIR_NAME=
 
 while getopts ":hn:s:m:w:u:p:s:" OPTION
 do
@@ -40,6 +44,9 @@ do
       ;;
     n)
       N_WORKERS=$OPTARG
+      ;;
+    k)
+      KEY_PAIR_NAME=$OPTARG
       ;;
     s)
       S3_BUCKET=$OPTARG
@@ -79,8 +86,23 @@ echo "** and individual instance status here:"
 echo "**  https://console.aws.amazon.com/ec2/"
 echo "** Leaving instances running when not being used can be costly."
 echo "** This script does not terminate clusters - that is your responsibility."
-
 echo ""
+
+if [[ -z $KEY_PAIR_NAME ]]
+then
+  echo "Key pair name not specified - selecting first listed key-pair from EC2..."
+  KEY_PAIR_NAME=$(aws ec2 describe-key-pairs --output text --query 'KeyPairs[0].KeyName')
+
+  if [[ -z $KEY_PAIR_NAME ]]
+  then
+    echo "Could not find a key pair name... exiting"
+    exit 1
+  fi
+  echo "Using key-pair: $KEY_PAIR_NAME"
+  echo ""
+fi
+
+
 echo "Syncing bootstrap scripts..."
 aws s3 sync scripts $S3_BUCKET/scripts
 
@@ -108,7 +130,7 @@ CLUSTER_ID=$(aws emr create-cluster \
 --emrfs Consistent=True \
 --no-visible-to-all-users \
 --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=$MASTER_TYPE InstanceGroupType=CORE,InstanceCount=$N_WORKERS,InstanceType=$WORKER_TYPE \
---ec2-attributes KeyName=tessera-emr,AdditionalMasterSecurityGroups=[$SEC_GROUP_ID] \
+--ec2-attributes KeyName=$KEY_PAIR_NAME,AdditionalMasterSecurityGroups=[$SEC_GROUP_ID] \
 --bootstrap-actions Path=s3://elasticmapreduce/bootstrap-actions/configure-hadoop,Args=[\
 -m,mapred.reduce.tasks.speculative.execution=false,\
 -m,mapred.map.tasks.speculative.execution=false,\
