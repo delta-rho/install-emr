@@ -35,7 +35,7 @@ PASSWD=tessera
 CIDR=$(dig +short myip.opendns.com @resolver1.opendns.com)/32
 KEY_PAIR_NAME=
 
-while getopts ":hn:s:m:w:u:p:s:" OPTION
+while getopts ":hn:k:s:m:w:u:p:c:" OPTION
 do
   case $OPTION in
     h)
