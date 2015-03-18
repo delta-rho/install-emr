@@ -11,6 +11,15 @@ Tessera Environment on Amazon EMR
 
 If you don't have these prerequisites, they will be covered in more detail below.
 
+### Installation ###
+
+You can install the scripts simply by cloning the github respository.
+
+```bash
+git clone https://github.com/tesseradata/install-emr
+cd install-emr/emr-3.2.1
+```
+
 ### Usage ###
 
 If you have the prerequisites and you have a bash shell, you can simply simply call tessera-emr.sh as follows:
