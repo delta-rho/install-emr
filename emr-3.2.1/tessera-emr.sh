@@ -34,6 +34,8 @@ USER=tessera-user
 PASSWD=tessera
 CIDR=$(dig +short myip.opendns.com @resolver1.opendns.com)/32
 KEY_PAIR_NAME=
+AWS_RES_TAG_KEY=app
+AWS_RES_TAG_VALUE=tessera
 
 while getopts ":hn:k:s:m:w:u:p:c:" OPTION
 do
@@ -102,22 +104,44 @@ then
   echo ""
 fi
 
-
 echo "Syncing bootstrap scripts..."
 aws s3 sync scripts $S3_BUCKET/scripts
 
+SEC_GROUP_TCP_PORT_1=80
+SEC_GROUP_TCP_PORT_2=3838
+
 echo ""
-echo "Setting up security group..."
+echo "Checking for existing Security Groups…"
 
-rstr=$(head -c 10 /dev/random | base64 | tr -dc 'a-zA-Z')
-GROUP_NAME=TesseraEMR-$rstr
+SEC_GROUP_ID=$(aws ec2 describe-security-groups --filters \
+Name=tag-key,Values=$AWS_RES_TAG_KEY Name=tag-value,Values=$AWS_RES_TAG_VALUE \
+Name=ip-permission.protocol,Values="tcp" \
+Name=ip-permission.from-port,Values=$SEC_GROUP_TCP_PORT_1 Name=ip-permission.to-port,Values=$SEC_GROUP_TCP_PORT_1 \
+Name=ip-permission.from-port,Values=$SEC_GROUP_TCP_PORT_2 Name=ip-permission.to-port,Values=$SEC_GROUP_TCP_PORT_2  \
+Name=ip-permission.cidr,Values="$CIDR" \
+--output text --query 'SecurityGroups[].GroupId')
 
-aws ec2 create-security-group --group-name $GROUP_NAME --description "web access"
-aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port 80 --cidr $CIDR
-aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port 3838 --cidr $CIDR
+if test -z "$SEC_GROUP_ID"
+then
+    # No existing Security Group, create.
+    echo "Existing Security Group not found. Setting up new Security Group..."
 
-# get group id to send to create-cluster
-SEC_GROUP_ID=$(aws ec2 describe-security-groups --group-names $GROUP_NAME --output text --query 'SecurityGroups[].GroupId')
+    rstr=$(head -c 10 /dev/random | base64 | tr -dc 'a-zA-Z')
+    GROUP_NAME=TesseraEMR-$rstr
+
+    aws ec2 create-security-group --group-name $GROUP_NAME --description "web access"
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port 80 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port 3838 --cidr $CIDR
+
+    # get group id to send to create-cluster
+    SEC_GROUP_ID=$(aws ec2 describe-security-groups --group-names $GROUP_NAME --output text --query 'SecurityGroups[].GroupId')
+    
+    # Taggin created Security Group
+    aws ec2 create-tags --resources $SEC_GROUP_ID --tags Key=$AWS_RES_TAG_KEY,Value=$AWS_RES_TAG_VALUE
+else
+    # Existing security group found.
+    echo "Using existing Security Group with ID $SEC_GROUP_ID"
+fi
 
 echo ""
 echo "Launching cluster..."
@@ -142,6 +166,9 @@ Path=$S3_BUCKET/scripts/install-tessera.sh \
 Path=s3://elasticmapreduce/bootstrap-actions/run-if,Args=["instance.isMaster=true",$S3_BUCKET/scripts/install-tessera-master.sh] \
 --steps Type=CUSTOM_JAR,Name=CustomJAR,ActionOnFailure=CONTINUE,Jar=s3://elasticmapreduce/libs/script-runner/script-runner.jar,Args=["$S3_BUCKET/scripts/post-install-config.sh",$USER,$PASSWD] \
 --output text --query ClusterId)
+
+echo "Tagging cluster…"
+aws emr add-tags --resource-id $CLUSTER_ID --tags $AWS_RES_TAG_KEY=$AWS_RES_TAG_VALUE
 
 echo ""
 echo "Cluster started $(date)..."
