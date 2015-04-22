@@ -49,7 +49,8 @@ sudo make install
 cd ..
 
 # rhipe
-export RHIPE_VERSION=0.75.1.4_hadoop-2
+ver=$(wget -qO- http://ml.stat.purdue.edu/rhipebin/current.ver)
+export RHIPE_VERSION=${ver}_hadoop-2
 
 wget http://ml.stat.purdue.edu/rhipebin/Rhipe_$RHIPE_VERSION.tar.gz
 
