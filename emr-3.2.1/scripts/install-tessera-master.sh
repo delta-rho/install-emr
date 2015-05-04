@@ -39,6 +39,9 @@ installRstudioPro(){
     sudo rstudio-server restart
 }
 
+# Upgrades R
+sudo yum update R.x86_64 -y
+
 # installRstudioPro
 installRstudio
 
