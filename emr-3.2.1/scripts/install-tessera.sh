@@ -5,6 +5,9 @@
 # this produces errors
 # R 3.0.2 already installed
 
+# Updating R
+sudo yum update R.x86_64 -y
+
 ## CONFIG
 function eVal {
     echo $1 | tee -a /home/hadoop/.Renviron

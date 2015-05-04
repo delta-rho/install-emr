@@ -28,7 +28,7 @@ EOF
 
 N_WORKERS=2
 S3_BUCKET=
-MASTER_TYPE=m1.large
+MASTER_TYPE=m1.xlarge
 WORKER_TYPE=m1.large
 USER=tessera-user
 PASSWD=tessera
@@ -150,9 +150,10 @@ CLUSTER_ID=$(aws emr create-cluster \
 --name "Tessera" \
 --enable-debugging --log-uri $S3_BUCKET/logs \
 --ami-version 3.2.1 \
---no-auto-terminate \
 --emrfs Consistent=True \
+--no-auto-terminate \
 --no-visible-to-all-users \
+--use-default-roles \
 --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=$MASTER_TYPE InstanceGroupType=CORE,InstanceCount=$N_WORKERS,InstanceType=$WORKER_TYPE \
 --ec2-attributes KeyName=$KEY_PAIR_NAME,AdditionalMasterSecurityGroups=[$SEC_GROUP_ID] \
 --bootstrap-actions Path=s3://elasticmapreduce/bootstrap-actions/configure-hadoop,Args=[\
