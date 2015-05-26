@@ -13,6 +13,7 @@ OPTIONS:
            (see key pairs in http://console.aws.amazon.com/ec2)
            If not specified, will use first listed key pair name
    -s      S3 bucket location to store scripts (required)
+   -e      Flag to use EMRFS - if set, will use EMRFS for s3 consitency
    -m      Master instance type (default m1.large)
    -w      Worker instance(s) type (default m1.large)
    -u      Username for RStudio Server login (default tessera-user)
@@ -36,6 +37,7 @@ CIDR=$(dig +short myip.opendns.com @resolver1.opendns.com)/32
 KEY_PAIR_NAME=
 AWS_RES_TAG_KEY=app
 AWS_RES_TAG_VALUE=tessera
+EMRFS=
 
 while getopts ":hn:k:s:m:w:u:p:c:" OPTION
 do
@@ -52,6 +54,9 @@ do
       ;;
     s)
       S3_BUCKET=$OPTARG
+      ;;
+    e)
+      EMRFS="--emrfs Consistent=True"
       ;;
     m)
       MASTER_TYPE=$OPTARG
@@ -135,7 +140,7 @@ then
 
     # get group id to send to create-cluster
     SEC_GROUP_ID=$(aws ec2 describe-security-groups --group-names $GROUP_NAME --output text --query 'SecurityGroups[].GroupId')
-    
+
     # Taggin created Security Group
     aws ec2 create-tags --resources $SEC_GROUP_ID --tags Key=$AWS_RES_TAG_KEY,Value=$AWS_RES_TAG_VALUE
 else
@@ -149,8 +154,7 @@ echo "Launching cluster..."
 CLUSTER_ID=$(aws emr create-cluster \
 --name "Tessera" \
 --enable-debugging --log-uri $S3_BUCKET/logs \
---ami-version 3.2.1 \
---emrfs Consistent=True \
+--ami-version 3.2.1 $EMRFS \
 --no-auto-terminate \
 --no-visible-to-all-users \
 --use-default-roles \

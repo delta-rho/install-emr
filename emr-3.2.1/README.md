@@ -71,7 +71,7 @@ You can sign in if you have an existing amazon.com account or create a new accou
 - After you have created the user, click the "Download Credentials" button - this will give you a file, `credentials.csv`, with your user's key and secret key that will be used when we configure the AWS Command Line Interface
 - Click on "Groups" and click the "Create New Group" button
 - Call the group what you'd like, e.g. "tessera"
-- Attach the following two policies to the group: `AmazonDynamoDBFullAccess`, `AmazonElasticMapReduceFullAccess`
+- Attach the following two policies to the group: `AmazonDynamoDBFullAccess`, `AmazonElasticMapReduceFullAccess` (DynamoDB access only required if you are going to use EMRFS with the `-e` option)
 - Now click "Groups" and click on the entry of the group you just created
 - Click the "Add Users to Group" button and select your user
 
@@ -119,6 +119,5 @@ You should now be ready to run tessera-emr.sh as outlined at the beginning of th
 #### Notes ####
 
 - `m1.large` or larger instance types must be used.  Smaller instance types have caused issues where hadoop is unable to start.
-- These scripts set up EMR with EMRFS enabled, meaning that you can use s3 buckets as your hadoop storage.  This is convenient for keeping storage persistent from cluster to cluster.
 - Each time a cluster is started a new security group is created with a name `TesseraEMR-xxxxxx`.  Periodically you may want to check your security groups and clean out old groups with this prefix.
 
