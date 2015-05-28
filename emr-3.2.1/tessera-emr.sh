@@ -13,7 +13,7 @@ OPTIONS:
            (see key pairs in http://console.aws.amazon.com/ec2)
            If not specified, will use first listed key pair name
    -s      S3 bucket location to store scripts (required)
-   -e      Flag to use EMRFS - if set, will use EMRFS for s3 consitency
+   -e      Flag to use EMRFS - if set, will use EMRFS for s3 consistency
    -m      Master instance type (default m1.large)
    -w      Worker instance(s) type (default m1.large)
    -u      Username for RStudio Server login (default tessera-user)
@@ -172,6 +172,12 @@ Path=s3://elasticmapreduce/bootstrap-actions/run-if,Args=["instance.isMaster=tru
 --steps Type=CUSTOM_JAR,Name=CustomJAR,ActionOnFailure=CONTINUE,Jar=s3://elasticmapreduce/libs/script-runner/script-runner.jar,Args=["$S3_BUCKET/scripts/post-install-config.sh",$USER,$PASSWD] \
 --output text --query ClusterId)
 
+
+if [ -z "$CLUSTER_ID" ]; then
+  echo "There was an issue with running aws emr create-cluster - a valid cluster ID was not returned... exiting"
+  exit 11
+fi
+
 echo "Tagging cluster…"
 aws emr add-tags --resource-id $CLUSTER_ID --tags $AWS_RES_TAG_KEY=$AWS_RES_TAG_VALUE
 
@@ -183,6 +189,7 @@ echo "Check status here:"
 echo " https://console.aws.amazon.com/elasticmapreduce/"
 echo "To terminate the cluster at any time, do the following:"
 echo " aws emr terminate-clusters --cluster-ids $CLUSTER_ID"
+echo "Then visit the EMR console on the web to verify it has been terminated."
 
 # loop until cluster is ready
 while : ; do
