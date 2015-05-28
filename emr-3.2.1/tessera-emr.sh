@@ -185,11 +185,11 @@ echo ""
 echo "Cluster started $(date)..."
 echo "Cluster ID is $CLUSTER_ID"
 echo "Waiting for bootstrap actions (could take over 15 minutes)"
-echo "Check status here:"
-echo " https://console.aws.amazon.com/elasticmapreduce/"
-echo "To terminate the cluster at any time, do the following:"
-echo " aws emr terminate-clusters --cluster-ids $CLUSTER_ID"
-echo "Then visit the EMR console on the web to verify it has been terminated."
+echo "  Check status on the EMR console:"
+echo "    https://console.aws.amazon.com/elasticmapreduce/"
+echo "  To terminate the cluster at any time, do the following:"
+echo "    aws emr terminate-clusters --cluster-ids $CLUSTER_ID"
+echo "  Then visit the EMR console to verify."
 
 # loop until cluster is ready
 while : ; do
@@ -200,6 +200,11 @@ while : ; do
     echo ""
     echo "Cluster is ready!"
     break
+  fi
+  if [ $STATE = "TERMINATING" ] || [ $STATE = "TERMINATED" ]; then
+    echo $STATE
+    echo "There was a problem bootstrapping the cluster.  See the logs on the EMR console."
+    exit 12
   fi
   sleep 5
 done
