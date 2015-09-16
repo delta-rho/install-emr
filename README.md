@@ -17,7 +17,7 @@ You can install the scripts simply by cloning the github respository.
 
 ```bash
 git clone https://github.com/tesseradata/install-emr
-cd install-emr/emr-3.2.1
+cd install-emr
 ```
 
 ### Usage ###
