@@ -5,8 +5,8 @@ installRstudio(){
 
     wget -q https://s3.amazonaws.com/rstudio-server/current.ver -O currentVersion.txt
     ver=$(cat currentVersion.txt)
-    wget http://download2.rstudio.org/rstudio-server-${ver}-x86_64.rpm
-    sudo yum install -y --nogpgcheck rstudio-server-${ver}-x86_64.rpm
+    wget http://download2.rstudio.org/rstudio-server-rhel-${ver}-x86_64.rpm
+    sudo yum install -y --nogpgcheck rstudio-server-rhel-${ver}-x86_64.rpm
     rm rstudio-server-*-x86_64.rpm
 
     echo "www-port=80" | sudo tee -a /etc/rstudio/rserver.conf
