@@ -192,6 +192,7 @@ echo ""
 echo "Launching cluster..."
 
 # http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-bootstrap.html#PredefinedbootstrapActions_ConfigureHadoop
+# http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/TaskConfiguration_H2.html
 
 CLUSTER_ID=$(aws emr create-cluster \
 --name "Tessera" \
@@ -209,8 +210,10 @@ CLUSTER_ID=$(aws emr create-cluster \
 -h,dfs.umaskmode=002,\
 -m,mapred.reduce.tasks.speculative.execution=false,\
 -m,mapred.map.tasks.speculative.execution=false,\
--m,mapred.map.child.java.opts=-Xmx4096m,\
--m,mapred.reduce.child.java.opts=-Xmx4096m,\
+-m,mapred.map.child.java.opts=-Xmx3072m,\
+-m,mapred.reduce.child.java.opts=-Xmx3072m,\
+-m,mapreduce.map.memory.mb=4096,\
+-m,mapreduce.reduce.memory.mb=4096,\
 -m,mapred.job.reuse.jvm.num.tasks=1] \
 --bootstrap-actions \
 Path=$S3_BUCKET/scripts/install-tessera.sh \
