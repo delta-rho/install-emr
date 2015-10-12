@@ -171,12 +171,12 @@ then
     GROUP_NAME=TesseraEMR-$rstr
 
     aws ec2 create-security-group --group-name $GROUP_NAME --description "web access"
-    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port SEC_GROUP_TCP_PORT_1 --cidr $CIDR
-    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port SEC_GROUP_TCP_PORT_2 --cidr $CIDR
-    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port SEC_GROUP_TCP_PORT_3 --cidr $CIDR
-    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port SEC_GROUP_TCP_PORT_4 --cidr $CIDR
-    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port SEC_GROUP_TCP_PORT_5 --cidr $CIDR
-    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port SEC_GROUP_TCP_PORT_6 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port $SEC_GROUP_TCP_PORT_1 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port $SEC_GROUP_TCP_PORT_2 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port $SEC_GROUP_TCP_PORT_3 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port $SEC_GROUP_TCP_PORT_4 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port $SEC_GROUP_TCP_PORT_5 --cidr $CIDR
+    aws ec2 authorize-security-group-ingress --group-name $GROUP_NAME --protocol tcp --port $SEC_GROUP_TCP_PORT_6 --cidr $CIDR
 
     # get group id to send to create-cluster
     SEC_GROUP_ID=$(aws ec2 describe-security-groups --group-names $GROUP_NAME --output text --query 'SecurityGroups[].GroupId')
