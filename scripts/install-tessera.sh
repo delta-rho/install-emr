@@ -27,7 +27,7 @@ echo '/home/hadoop/.versions/2.4.0/lib/native/' | sudo tee -a  /etc/ld.so.conf.d
 sudo ldconfig
 
 # set repositories
-echo 'options(repos=c(tessera="http://ml.stat.purdue.edu/drat", CRAN="http://cran.rstudio.com"))' | sudo tee -a /usr/lib64/R/library/base/R/Rprofile
+echo 'options(repos=c(tessera="http://packages.tessera.io", CRAN="http://cran.rstudio.com"))' | sudo tee -a /usr/lib64/R/library/base/R/Rprofile
 
 
 # packages need updating/installing
