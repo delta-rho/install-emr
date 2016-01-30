@@ -197,7 +197,7 @@ echo "Launching cluster..."
 CLUSTER_ID=$(aws emr create-cluster \
 --name "Tessera" \
 --enable-debugging --log-uri $S3_BUCKET/logs \
---ami-version 3.9.0 $EMRFS \
+--ami-version 3.11.0 $EMRFS \
 --applications Name=Ganglia \
 --no-auto-terminate \
 --no-visible-to-all-users \
@@ -205,16 +205,17 @@ CLUSTER_ID=$(aws emr create-cluster \
 --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=$MASTER_TYPE InstanceGroupType=CORE,InstanceCount=$N_WORKERS,InstanceType=$WORKER_TYPE \
 --ec2-attributes KeyName=$KEY_PAIR_NAME,AdditionalMasterSecurityGroups=[$SEC_GROUP_ID] \
 --bootstrap-actions Path=s3://elasticmapreduce/bootstrap-actions/configure-hadoop,Args=[\
--h,dfs.permissions.enabled=true,\
+-h,dfs.permissions.enabled=false,\
 -h,fs.permissions.umask-mode=002,\
--h,dfs.umaskmode=002,\
--m,mapred.reduce.tasks.speculative.execution=false,\
--m,mapred.map.tasks.speculative.execution=false,\
--m,mapred.map.child.java.opts=-Xmx3072m,\
--m,mapred.reduce.child.java.opts=-Xmx3072m,\
--m,mapreduce.map.memory.mb=4096,\
--m,mapreduce.reduce.memory.mb=4096,\
--m,mapred.job.reuse.jvm.num.tasks=1] \
+-m,mapreduce.reduce.speculative=false,\
+-m,mapreduce.map.speculative=false,\
+-m,mapreduce.map.java.opts=-Xmx1024m,\
+-m,mapreduce.reduce.java.opts=-Xmx1024m,\
+-m,mapreduce.map.memory.mb=2048,\
+-m,mapreduce.reduce.memory.mb=2048,\
+-m,mapreduce.job.jvm.numtasks=1,\
+-y,yarn.nodemanager.vmem-check-enabled=false,\
+-y,yarn.nodemanager.pmem-check-enabled=false] \
 --bootstrap-actions \
 Path=$S3_BUCKET/scripts/install-tessera.sh \
 Path=s3://elasticmapreduce/bootstrap-actions/run-if,Args=["instance.isMaster=true",$S3_BUCKET/scripts/install-tessera-master.sh] \
