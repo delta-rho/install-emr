@@ -204,19 +204,19 @@ CLUSTER_ID=$(aws emr create-cluster \
 --use-default-roles \
 --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=$MASTER_TYPE InstanceGroupType=CORE,InstanceCount=$N_WORKERS,InstanceType=$WORKER_TYPE \
 --ec2-attributes KeyName=$KEY_PAIR_NAME,AdditionalMasterSecurityGroups=[$SEC_GROUP_ID] \
---bootstrap-actions Path=s3://elasticmapreduce/bootstrap-actions/configure-hadoop,Args=[\
--h,dfs.permissions.enabled=false,\
--h,fs.permissions.umask-mode=002,\
--m,mapreduce.reduce.speculative=false,\
--m,mapreduce.map.speculative=false,\
--m,mapreduce.map.java.opts=-Xmx1024m,\
--m,mapreduce.reduce.java.opts=-Xmx1024m,\
--m,mapreduce.map.memory.mb=2048,\
--m,mapreduce.reduce.memory.mb=2048,\
--m,mapreduce.job.jvm.numtasks=1,\
--y,yarn.nodemanager.vmem-check-enabled=false,\
--y,yarn.nodemanager.pmem-check-enabled=false] \
 --bootstrap-actions \
+Path=s3://elasticmapreduce/bootstrap-actions/configure-hadoop,Args=[\
+"-h","dfs.permissions.enabled=false",\
+"-h","fs.permissions.umask-mode=002",\
+"-m","mapreduce.reduce.speculative=false",\
+"-m","mapreduce.map.speculative=false",\
+"-m","mapreduce.map.java.opts=-Xmx1024m",\
+"-m","mapreduce.reduce.java.opts=-Xmx1024m",\
+"-m","mapreduce.map.memory.mb=2048",\
+"-m","mapreduce.reduce.memory.mb=2048",\
+"-m","mapreduce.job.jvm.numtasks=1",\
+"-y","yarn.nodemanager.vmem-check-enabled=false",\
+"-y","yarn.nodemanager.pmem-check-enabled=false"] \
 Path=$S3_BUCKET/scripts/install-tessera.sh \
 Path=s3://elasticmapreduce/bootstrap-actions/run-if,Args=["instance.isMaster=true",$S3_BUCKET/scripts/install-tessera-master.sh] \
 --steps Type=CUSTOM_JAR,Name=CustomJAR,ActionOnFailure=CONTINUE,Jar=s3://elasticmapreduce/libs/script-runner/script-runner.jar,Args=["$S3_BUCKET/scripts/post-install-config.sh",$USER,$PASSWD] \
